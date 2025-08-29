@@ -1,106 +1,168 @@
-import java.util.Scanner;
+import java.util.Random;
+import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        // Vetor NÃO ordenado (para teste da busca linear não ordenada)
-        int[] vetorNaoOrdenado = {12, 5, 9, 1, 20, 7, 60, 25, 33, 81, 36, 3, 56, 99 , 21, 5, 31};
-
-        // Vetor ORDENADO (para teste da linear ordenada e binária)
-        int[] vetorOrdenado = {1, 3, 5, 7, 9, 12, 20, 26, 31, 36, 44, 56, 72, 88, 90, 99, 105};
-
-        // Valor de entrada que vai ser procurado dentro dos vetores
-        System.out.println("Digite o valor que deseja buscar:");
-        int valorScanner = scanner.nextInt();
-
-        // Testa busca linear não ordenada
-        Resultado resultado1 = BuscaLinearNaoOrdenada.busca(vetorNaoOrdenado, valorScanner);
-        if (resultado1.posicao != -1)
-            System.out.println("Busca Linear (não ordenado): encontrado na posição " + resultado1.posicao);
-        else
-            System.out.println("Busca Linear (não ordenado): não encontrado");
-        System.out.println("Comparações feitas: " + resultado1.comparacoes);
-
-        // Testa busca linear ordenada
-        Resultado resultado2 = BuscaLinearOrdenada.busca(vetorOrdenado, valorScanner);
-        if (resultado2.posicao != -1)
-            System.out.println("Busca Linear (ordenado): encontrado na posição " + resultado2.posicao);
-        else
-            System.out.println("Busca Linear (ordenado): não encontrado");
-        System.out.println("Comparações feitas: " + resultado2.comparacoes);
-
-        // Testa busca binária
-        Resultado resultado3 = BuscaBinaria.busca(vetorOrdenado, valorScanner);
-        if (resultado3.posicao != -1)
-            System.out.println("Busca Binária (ordenado): encontrado na posição " + resultado3.posicao);
-        else
-            System.out.println("Busca Binária (ordenado): não encontrado");
-        System.out.println("Comparações feitas: " + resultado3.comparacoes);
-    }
-}
-
-// Classe auxiliar para guardar posição encontrada + número de comparações
-class Resultado {
-    int posicao;
-    int comparacoes;
-
-    Resultado(int posicao, int comparacoes) {
-        this.posicao = posicao;
-        this.comparacoes = comparacoes;
-    }
-}
-
-// Busca Linear Vetor Não Ordenado
-class BuscaLinearNaoOrdenada {
-    public static Resultado busca(int[] vetor, int valorScanner) {
-        int comparacoes = 0;
+    // Busca Linear para vetor não ordenado
+    public static int buscaLinearNaoOrdenado(int[] vetor, int valorBuscado) {
+        //Contador de operações
+        int operacoes = 0;
+        //Laço for até encontrar o valor procurado.
         for (int i = 0; i < vetor.length; i++) {
-            comparacoes++;
-            if (vetor[i] == valorScanner) {
-                return new Resultado(i, comparacoes);
+            operacoes++;
+            if (vetor[i] == valorBuscado) {
+                System.out.println("Busca Linear (não ordenado): elemento encontrado na posição " + i);
+                System.out.println("Operações realizadas: " + operacoes);
+                return i;
             }
         }
-        return new Resultado(-1, comparacoes);
+        //Caso não seja encontrado no vetor
+        return -1;
     }
-}
 
-// Busca Linear Vetor Ordenado
-class BuscaLinearOrdenada {
-    public static Resultado busca(int[] vetor, int valorScanner) {
-        int comparacoes = 0;
+    // Busca Linear para vetor ordenado
+    public static int buscaLinearOrdenado(int[] vetor, int valorBuscado) {
+        //Contador de operações
+        int operacoes = 0;
+        //Laço for até encontrar o valor procurado.
         for (int i = 0; i < vetor.length; i++) {
-            comparacoes++;
-            if (vetor[i] == valorScanner) {
-                return new Resultado(i, comparacoes);
-            }
-            if (vetor[i] > valorScanner) {
-                break; // já passou do valor
+            operacoes++;
+            if (vetor[i] == valorBuscado) {
+                System.out.println("Busca Linear (ordenado): elemento encontrado na posição " + i);
+                System.out.println("Operações realizadas: " + operacoes);
+                return i;
             }
         }
-        return new Resultado(-1, comparacoes);
+        //Caso não seja encontrado no vetor
+        return -1;
     }
-}
 
-// Busca Binária Vetor Ordenado
-class BuscaBinaria {
-    public static Resultado busca(int[] vetor, int valorScanner) {
+    // Busca Binária para vetor ordenado
+    public static int buscaBinaria(int[] vetor, int valorBuscado) {
+        //Definir posição inicial e final do vetor
         int inicio = 0;
         int fim = vetor.length - 1;
-        int comparacoes = 0;
 
+        //Contador de operações
+        int operacoes = 0;
+
+        //Loop até encontrar o valor procurado
         while (inicio <= fim) {
+            operacoes++;
             int meio = (inicio + fim) / 2;
-            comparacoes++;
 
-            if (vetor[meio] == valorScanner) {
-                return new Resultado(meio, comparacoes);
-            } else if (vetor[meio] < valorScanner) {
+            /*
+            Condicional para o valor buscado mover dentro do vetor
+            -Caso
+             */
+            if (vetor[meio] == valorBuscado) {
+                System.out.println("Busca Binária: elemento encontrado na posição " + meio);
+                System.out.println("Operações realizadas: " + operacoes);
+                return meio;
+            } else if (vetor[meio] < valorBuscado) {
                 inicio = meio + 1;
             } else {
                 fim = meio - 1;
             }
         }
-        return new Resultado(-1, comparacoes);
+
+        System.out.println("Busca Binária: elemento não encontrado");
+        System.out.println("Operações realizadas: " + operacoes);
+        return -1;
+    }
+
+    //Main
+    public static void main(String[] args) {
+
+        //Tamanho e criação do vetor
+        int tamanho = 1000;
+        int[] vetorNaoOrdenado = new int[tamanho];
+        Random random = new Random();
+
+        // Cria um vetor com valores de 1 a 1000 que não repete valores
+        for (int i = 0; i < tamanho; i++) {
+            int numero;
+            boolean repetido;
+            do {
+                numero = random.nextInt(1000) + 1;
+                repetido = false;
+                //Percorre todo o vetor para verificar se existe algum valor repetido
+                for (int j = 0; j < i; j++) {
+                    if (vetorNaoOrdenado[j] == numero) {
+                        repetido = true;
+                        break;
+                    }
+                }
+            } while (repetido);
+            vetorNaoOrdenado[i] = numero;
+        }
+
+        // Cria vetor ordenado a partir do vetor não ordenado
+        int[] vetorOrdenado = vetorNaoOrdenado.clone();
+        Arrays.sort(vetorOrdenado);
+
+        //Teste
+        /*
+        Vão ser utilizados três posições diferentes para mostrar o comportamento de diferentes tipos de buscas.
+        Os vetores tem o tamanho 1000 e serão utilizados a posição 0 do vetor, (vetor.length/2) -1  e vetor.length.
+         */
+        int valorInicio = vetorOrdenado[0];                // menor valor
+        int indiceMeio  = (0 + (tamanho - 1)) / 2;        // índice do meio inicial da busca binária
+        int valorMeio   = vetorOrdenado[indiceMeio];      // valor que será encontrado em 1 operação na binária
+        int valorFim    = vetorOrdenado[tamanho - 1];     // maior valor
+
+        System.out.println("\nBuscar o menor valor do vetor.");
+        buscaLinearNaoOrdenado(vetorNaoOrdenado, valorInicio);      //Melhor caso (primeiro valor)
+        buscaLinearOrdenado(vetorOrdenado, valorInicio);
+        buscaBinaria(vetorOrdenado, valorInicio);
+
+        System.out.println("\nBuscar o valor médio do vetor");
+        buscaLinearNaoOrdenado(vetorNaoOrdenado, valorMeio);
+        buscaLinearOrdenado(vetorOrdenado, valorMeio);                  //Caso médio
+        buscaBinaria(vetorOrdenado, valorMeio);                         //Melhor caso (valor médio)
+
+        System.out.println("\nBuscar o valor final do vetor");
+        buscaLinearNaoOrdenado(vetorNaoOrdenado, valorFim);             //Pior caso (último valor)
+        buscaLinearOrdenado(vetorOrdenado, valorFim);
+        buscaBinaria(vetorOrdenado, valorFim);
+
+
+        //Melhores, Piores e Caso Médio
+        //Mostrar os melhores casos para cada tipo de busca
+        System.out.println("\nMelhor caso de cada busca:");
+        System.out.println("\nBusca Linear Não Ordenado:");
+        //Mostra o valor que está na posição 0 do vetor não ordenado
+        int valorMelhorCasoNaoOrdenado = vetorNaoOrdenado[0];
+        System.out.print("O valor procurado seria: "+ valorMelhorCasoNaoOrdenado + ", Posição " + (valorInicio - 1));
+        System.out.println("\nBusca Linear Ordenado:");
+        System.out.println("O valor procurado seria: " + valorInicio + ", Posição " + (valorInicio - 1));
+        System.out.println("Busca Binária Ordenado:");
+        System.out.println("O valor procurado seria: " + valorMeio + ", Posição " + (valorMeio - 1));
+
+
+        //Mostrar os piores casos para cada tipo de busca (ignorando inexistente)
+        System.out.println("\nPior caso de cada busca:");
+        System.out.println("\nBusca Linear Não Ordenado:");
+        //Mostra o valor que está na posição 0 do vetor não ordenado
+        int valorPiorCasoNaoOrdenado = vetorNaoOrdenado[0];
+        System.out.print("O valor procurado seria: "+ valorPiorCasoNaoOrdenado + ", Posição " + valorFim);
+        System.out.println("\nBusca Linear Ordenado:");
+        System.out.println("O valor procurado seria: " + valorInicio + ", Posição " + valorFim);
+        System.out.println("Busca Binária Ordenado:");
+        System.out.println("O valor procurado seria: " + valorInicio + " ou " +
+                valorFim + ", Posição " + (valorInicio - 1) + " ou " + (valorFim - 1));
+
+
+        //Mostrar os casos médios
+        System.out.println("\nCaso médio de cada busca:");
+        System.out.println("\nBusca Linear Não Ordenado:");
+        //Mostra o valor que está na posição 0 do vetor não ordenado
+        int valorMedioCasoNaoOrdenado = vetorNaoOrdenado[vetorNaoOrdenado.length - 1];
+        System.out.print("O valor procurado seria: "+ valorMedioCasoNaoOrdenado + ", Posição " + valorMeio);
+        System.out.println("\nBusca Linear Ordenado:");
+        System.out.println("O valor procurado seria: " + valorMeio + ", Posição " + (valorMeio - 1));
+        System.out.println("Busca Binária Ordenado:");
+        System.out.println("O valor procurado não seria exato entretanto é possível estimar:\n");
+        System.out.println("Usar O(log n): Log2(1000) aproximadamente 8.997");
     }
 }
