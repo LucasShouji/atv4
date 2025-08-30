@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.Arrays;
 
-public class Main {
+public class CompararBusca {
 
     // Busca Linear para vetor não ordenado
     public static int buscaLinearNaoOrdenado(int[] vetor, int valorBuscado) {
